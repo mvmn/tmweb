@@ -1,0 +1,195 @@
+<html>
+	<head>
+		<title>TMWeb project goals</title>
+	</head>
+	<body>
+		<div>
+			<p>Author: Mykola Makhin</p>
+			<h2>Project goals</h2>
+			<p>
+				Main goal of the project is to create PHP/MySQL website engine
+				for Toastmasters Clubs websites.
+			</p>
+			<p>
+				Besides providing public information about the club to the outside world,
+				toastmasters clubs websites based on this engine should be able
+				to facilitate fighting several particular problems of TM Clubs,
+				namely: a) lack of competitive attitude among members (which eventually
+				causes apathy, slow progress, absentheism etc) and b) absence or low clarity 
+				of club members progress information.
+			</p> 
+			<p>
+				In order to inspire club members to work harder on their progress, club website
+				should present members progress information in condensed and convenient form, 
+				displaying each members progress side by side in such form, that would allow club
+				members to easily see, who's progress fast, and who is going slow, and thus trigger
+				a competitive spark among them. To accomplish this goal, website engine will provide
+				as a part of public information two tables: members speeches progress table and members
+				roles participation table.
+			</p>
+			<p>
+				Both of these tables will allow club offices to easily track status and progress 
+				of members of the club, and thus identify members that for example need help, 
+				or on contrary, can help other members. For instance, if some member has been taking
+				timer role for many times, while other member has never been a timer before, VP of
+				education can easily see this in a table, and advice the weaker member to ask
+				that more experienced member for guidance. 
+			</p>
+			<p>
+				One more extra feature planned for this project is a meetings timeline table.
+				Contrary to previous two, this table won't be publicly available to any site visitor,
+				but only to club officers. In this table club officer should be able to see club
+				meetings timeline for a certain period (with pagination for accessing earlier/later 
+				periods data), in which he is supposed to easily see times when meetings were cancelled,
+				and kind+amount of activities peformed at each meetings (i.e. speeches projects, advanced
+				speeches projects, table topics, debates, games etc), grouped by performing member, 
+				or by kind of activity. This table will allow club officers to keep track of 
+				activities and members recent engagement, thus allowing them to notice trends
+				and problems like for example having a debate section each meeting for last 5 meetings,
+				or not having certain activity on meetings for long time. As well as member trens, like
+				seeting if some of club members recently stopped taking any other roles than 
+				timer for example.
+			</p>
+			<h3>Speeches progress table example</h3>
+			<p>
+				The table content is quite straightforward: list of members ordered by number of speeches
+				accomplished by a member, and a column that displays each speech as a colored square.
+				Color represents one of the speech programs, and is faded for older speeches using 
+				configurable fade rate. In this example, green represents mandatory base speech program - 
+				the Competent Communicator program. And blue represent one of the advanced programs
+				(like Public Relations, Storytelling etc). Count of table cells in accomplishment in a row
+				is equal to number of speech projects performed by the member who accomplished most of them
+				among club members (his row is therefore completely filled with colors).
+				For all members who accomplished less speech projects there will be empty cells in
+				accomplishment row.
+			</p>
+			<table width="100%" border="1">
+				<tr style="font-weight: bold">
+					<td width="20%">Member</td><td width="80%" colspan="14">Speech projects</td>
+				</tr>
+				<tr>
+					<td>John Smith</td>
+					<td style="background-color: #559F55"></td>
+					<td style="background-color: #559F55"></td>
+					<td style="background-color: #55AF55"></td>
+					<td style="background-color: #55AF55"></td>
+					<td style="background-color: #55AF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #5555FF"></td>
+					<td style="background-color: #5555FF"></td>
+				</tr>
+				<tr>
+					<td>Peter Carpenter</td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+				</tr>
+				<tr>
+					<td>Jack Bauman</td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+				</tr>
+				<tr>
+					<td>Lloyd Flynn</td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55BF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+				</tr>
+				<tr>
+					<td>Ivan Petrov</td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55EF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #55FF55"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+					<td style="background-color: #FFFFFF"></td>
+				</tr>
+				<tr>
+					<td colspan="15">...</td>
+				</tr>
+			</table>
+			<h3>Roles participation table example</h3>
+			<p>
+				This table contains pictographic display of club members roles taking. 
+				Due to possibility of taking some role very many times by one user over time, grouping
+				for 10-times taking might be needed (using some noticeable pictogram).
+				The goal is to make roles taking activity very vivid by displaying each activity as one
+				pictogram, and each 10-times by big more noticeable pictogram, thus making it very
+				visually clear which members have been active on taking roles, and which still have to
+				catch up.
+			</p>
+			<table width="100%" border="1">
+				<tr style="font-weight: bold">
+					<td width="20%">Member</td><td width="80%">Activity</td>
+				</tr>
+				<tr>
+					<td>Jack Bauman</td>
+					<td>TTTTTTT<br/><b>Ax10</b> A<br/>MMM</td>
+				</tr>
+				<tr>
+					<td>Peter Carpenter</td>
+					<td><b>Tx10</b> TTT<br/>MM</td>
+				</tr>
+				<tr>
+					<td>Lloyd Flynn</td>
+					<td>TTTTTTT<br/>AAAAA<br/>MMMM</td>
+				</tr>
+				<tr>
+					<td>Ivan Petrov</td>
+					<td>TTTTTTTTT<br/><b>Ax10</b><br/>MMMMMMMM</td>
+				</tr>
+				<tr>
+					<td>John Smith</td>
+					<td><b>Tx10 Tx10</b> TTT<br/><b>Ax10</b> AAAAAAA<br/><b>Mx10</b> MM</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>
