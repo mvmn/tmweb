@@ -64,7 +64,7 @@
 					mysql_close($dbLink);
 				}
 			} elseif($userAction == "generateScriptAction") {
-				echo str_replace(" ", "&nbsp;", str_replace("\n","<br/>", DBHelper::createTablesScript($dbTables)));
+				echo str_replace(" ", "&nbsp;", str_replace("\n","<br/>", AdminDBHelper::createTablesScript($dbTables)));
 			} elseif($userAction == "runScriptAction") {
 				$dbLink = mysql_connect($dbHost, $dbName, $dbPass);
 				if (!$dbLink) {
@@ -81,7 +81,7 @@
 					
 					foreach ($dbTables as $tblKey => $table) {
 						echo 'Creating table '.$tblKey.'...<br/>';
-						$script = DBHelper::createTableScript($tblKey, $dbTables[$tblKey]);
+						$script = AdminDBHelper::createTableScript($tblKey, $dbTables[$tblKey]);
 						$result = mysql_query($script, $dbLink);
 						if (!$result) {
     						echo 'Error occurred: '.mysql_error()."<br/>";

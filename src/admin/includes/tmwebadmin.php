@@ -109,12 +109,12 @@
 		)
 	);
 	
-	class DBHelper {
+	class AdminDBHelper {
 		
 		public static function createTablesScript($dbFieldsArraysArray) {
 			$script = '';
 			foreach ($dbFieldsArraysArray as $tblKey => $table) {
-				$script = $script.DBHelper::createTableScript($tblKey, $dbFieldsArraysArray[$tblKey]);
+				$script = $script.AdminDBHelper::createTableScript($tblKey, $dbFieldsArraysArray[$tblKey]);
 			}
 			return $script;
 		}
@@ -126,6 +126,40 @@
 			}	
 			$script = $script."    id int not null auto_increment,\n    primary key(id)\n);\n\n";
 			return $script;
+		}
+		
+		public static function insertMember($dbLink, $email, $pwdhash, $contacts, $picture) {
+			$query = 'insert into Member (email, pwdhash, contactInfo, image) values (\''
+				.mysql_real_escape_string($email, $dbLink).'\', \''
+				.mysql_real_escape_string($pwdhash, $dbLink).'\', \''
+				.mysql_real_escape_string($contacts, $dbLink).'\', \''
+				.mysql_real_escape_string($picture, $dbLink).'\');';
+			return mysql_query($query, $dbLink);
+		}
+		
+		public static function updateMember($dbLink, $memberId, $email, $pwdhash, $contacts, $picture) {
+			$query = 'update Member set ';
+			$commaNeeded = false;
+			if(isset($email)) {
+				$query = $query.' email = \''.mysql_real_escape_string($email, $dbLink).'\'';
+				$commaNeeded = true;
+			}
+			if(isset($pwdhash)) {
+				if($commaNeeded) $query = $query.', ';
+				$query = $query.' pwdhash = \''.mysql_real_escape_string($pwdhash, $dbLink).'\'';
+				$commaNeeded = true;
+			}
+			if(isset($contacts)) {
+				if($commaNeeded) $query = $query.', ';
+				$query = $query.' contactInfo = \''.mysql_real_escape_string($contacts, $dbLink).'\'';
+				$commaNeeded = true;
+			}
+			if(isset($picture)) {
+				if($commaNeeded) $query = $query.', ';
+				$query = $query.' image = \''.mysql_real_escape_string($picture, $dbLink).'\'';
+			}
+			$query = $query.' where id = '.mysql_real_escape_string($memberId, $dbLink);
+			return mysql_query($query, $dbLink);
 		}
 	};
 	
