@@ -1,10 +1,5 @@
 <?php
 	// #### GLOBAL SETTINGS
-	// MySQL DB
-	global $dbName;
-	global $dbPass;
-	$dbName = 'lvivtm';
-	$dbPass = 'lviv70457';
 	// Admin Login
 	global $adminPwdMD5;
 	global $adminPwdSHA256;
@@ -52,30 +47,32 @@
 		}
 	
 		public function getDefaultValue() {
-			return $this->defaultValue();
+			return $this->defaultValue;
 		}
 	
 		public function __toString() {
 			$result = $this->identifier.' '.$this->type;
-			if(!empty($this->typeModifier)) {
+			if(isset($this->typeModifier) && strlen($this->typeModifier)>0) {
 				$result = $result.'('.$this->typeModifier.')';
 			}
-			if(!empty($this->notNull)) {
+			if(isset($this->notNull)) {
 				$result = $result.' NOT NULL';
 			}
-			if(!empty($this->defaultValue)) {
-				$result = $result.' DEFAULT(\''.str_replace('\'','\\\'', $this->defaultValue).'\')';
+			if(isset($this->defaultValue)  && strlen($this->defaultValue)>0) {
+				$result = $result.' DEFAULT \''.str_replace('\'','\\\'', $this->defaultValue).'\'';
 			}
 			return $result;
 		}
 	};
 	
-	$tables = array(
+	global $dbTables;
+	$dbTables = array(
 		"Member" => array(
 			"email" => new DBField("email", "nvarchar", "1024", true, NULL),
 			"pwdhash" => new DBField("pwdhash", "varchar", "1024", true, NULL),
 			"contactInfo" => new DBField("contactInfo", "text", NULL, false, NULL),
-			"image" => new DBField("image", "blob", NULL, false, NULL)
+			"image" => new DBField("image", "blob", NULL, false, NULL),
+			"disabled" => new DBField("disabled", "boolean", NULL, true, "0")
 		),
 		"Meeting" => array(
 			"dateandtime" => new DBField("dateandtime", "datetime", NULL, true, NULL),
@@ -171,8 +168,6 @@
 			global $adminEmail;
 						
 			$reqIp = $_SERVER['REMOTE_ADDR'];
-			
-			echo $GLOBALS['adminLoginFailuresCount_'.$reqIp];
 			
 			$loginFailures = 0;
 			if(!empty($GLOBALS['adminLoginFailuresCount_'.$reqIp])) { // FIXME: GLOBALS aren't application scope! PHP sucks )-:

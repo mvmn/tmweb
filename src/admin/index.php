@@ -42,15 +42,58 @@
 		} else {
 			// 2.2 - LOGGED IN AND REDIRECTED AFTER LOGIN FORM SUBMIT
 			?>
+				<a href="index.php">Home</a> |
 				<a href="index.php?userAction=logoutAction">Logout</a> |
-				<a href="index.php?userAction=generateScriptAction">DB Tables SQL script</a> 
+				<a href="index.php?userAction=generateScriptAction">Generate DB SQL script</a> |
+				<a href="index.php?userAction=runScriptAction">Run create tables on DB</a> |
+				<a href="index.php?userAction=manageMembers">Manage members</a> |
+				<a href="index.php?userAction=manageRoles">Manage roles</a> |
+				<a href="index.php?userAction=managePrograms">Manage speaking programs</a>
 				<br/>
 				<hr/>
 			<?php 
 			$userAction = RequestHelper::getUserAction();
-			if($userAction == "generateScriptAction") {
-				echo str_replace(" ", "&nbsp;", str_replace("\n","<br/>", DBHelper::createTablesScript($tables)));
-			} elseif($userAction == "somethingElse") {
+			if($userAction == "") {
+				$dbLink = mysql_connect($dbHost, $dbName, $dbPass);
+				if (!$dbLink) {
+				    echo 'Could not connect to database: '.mysql_error().'.';
+				    echo '<br/><br/>';
+				} else {
+					echo 'DB connection ok.';
+					echo '<br/><br/>';
+					mysql_close($dbLink);
+				}
+			} elseif($userAction == "generateScriptAction") {
+				echo str_replace(" ", "&nbsp;", str_replace("\n","<br/>", DBHelper::createTablesScript($dbTables)));
+			} elseif($userAction == "runScriptAction") {
+				$dbLink = mysql_connect($dbHost, $dbName, $dbPass);
+				if (!$dbLink) {
+				    echo 'Could not connect to database: '.mysql_error().'.';
+				    echo '<br/><br/>';
+				} else {
+					echo 'Connected to DB successfully.';
+					echo '<br/>';
+					echo 'Switching DB to &quot;'.$dbName.'&quot;.<br/>';
+					if(!mysql_select_db($dbName)) {
+						echo 'Error occurred: '.mysql_error()."<br/>";
+					}
+					echo '<br/>';
+					
+					foreach ($dbTables as $tblKey => $table) {
+						echo 'Creating table '.$tblKey.'...<br/>';
+						$script = DBHelper::createTableScript($tblKey, $dbTables[$tblKey]);
+						$result = mysql_query($script, $dbLink);
+						if (!$result) {
+    						echo 'Error occurred: '.mysql_error()."<br/>";
+						}
+						echo '<br/>';	
+					}
+					
+					mysql_close($dbLink);				
+				}
+			} elseif($userAction == "manageMembers") {
+			} elseif($userAction == "manageRoles") {
+			} elseif($userAction == "managePrograms") {
 				
 			} else {
 				?>
