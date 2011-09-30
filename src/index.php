@@ -1,7 +1,10 @@
-<html>
-	<body>
 <?php
-	echo 'Under construction';
+	require './includes/init.php';
+	require './fragments/head.php';
+	require './fragments/topmenu.php';
 ?>
-	</body>
-</html>
+	Under construction.
+<?php
+	
+	require './fragments/tail.php';
+?>

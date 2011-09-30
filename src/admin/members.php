@@ -9,6 +9,13 @@
 		// #### START
 		
 		$userAction = RequestHelper::getUserAction();
+		if($userAction == "") {
+			
+		} elseif($userAction == "addMember") {
+			
+		} elseif($userAction == "editMember") {
+			
+		}
 		
 		// #### END
 		require './fragments/tail.php';
