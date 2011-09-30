@@ -44,7 +44,7 @@
 			<?php 
 			$userAction = RequestHelper::getUserAction();
 			if($userAction == "testDBConnection") {
-				$dbLink = mysql_connect($dbHost, $dbName, $dbPass);
+				$dbLink = mysql_connect($dbHost, $dbUser, $dbPass);
 				if (!$dbLink) {
 				    echo 'Could not connect to database: '.mysql_error().'.';
 				    echo '<br/><br/>';
@@ -56,7 +56,7 @@
 			} elseif($userAction == "generateScriptAction") {
 				echo str_replace(" ", "&nbsp;", str_replace("\n","<br/>", AdminDBHelper::createTablesScript($dbTables)));
 			} elseif($userAction == "runScriptAction") {
-				$dbLink = mysql_connect($dbHost, $dbName, $dbPass);
+				$dbLink = mysql_connect($dbHost, $dbUser, $dbPass);
 				if (!$dbLink) {
 				    echo 'Could not connect to database: '.mysql_error().'.';
 				    echo '<br/><br/>';
