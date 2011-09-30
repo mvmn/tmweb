@@ -1,29 +1,19 @@
 <?php
-	session_start();
-	require_once './includes/tmwebadmin.php';
-	require_once '../includes/tmweb.php';
-		
-	$loginInfo = AdminLogin::processRequest();
-?>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-		<title><?php echo $siteName ?> Administration Page</title>
-		<script type="text/javascript">
-			function redirectToIndex() {
-				window.location.href="index.php";
-			}
-		</script>
-	</head>
-	<body>
-<?php 
+	require './includes/init.php';
+	require './fragments/head.php';
+
 	if($loginInfo->isLoggedIn()!=true) {
 		// 1 - NOT LOGGED IN
 		if($loginInfo->isLoginAttempt()) { echo 'Login failed<br/>'; }
-		if($loginInfo->isIPBlocked()) { echo 'Maximum logins limit exceeded!<br/>'; } 
+		if($loginInfo->isIPBlocked()) { echo 'Maximum logins limit exceeded!<br/>'; }
+		$proceedUrl = "index.php";
+		if(isset($_REQUEST['proceedUrl']) && strlen($_REQUEST['proceedUrl'])>0) {
+			$proceedUrl = $_REQUEST['proceedUrl'];
+		}
 		?>
 			<form action="index.php" method="POST">
 				<input type="hidden" name="userAction" value="loginAction" />
+				<input type="hidden" name="proceedUrl" value="<?php echo $proceedUrl ?>" />
 				Password: <input type="password" name="password" />
 				<input type="submit" />
 			</form>
@@ -32,28 +22,28 @@
 		// 2 - LOGGED IN
 		if($loginInfo->isLoginAttempt()) {
 			// 2.1 - JUST SUBMITTED LOGIN FORM - REDIRECT AFTER POST
+			$proceedUrl = "index.php";
+			if(isset($_REQUEST['proceedUrl']) && strlen($_REQUEST['proceedUrl'])>0) {
+				$proceedUrl = $_REQUEST['proceedUrl'];
+			}
 			?>
 				Login succeeded. You will be redirected to admin pages now.<br/> 
-				Nothing happens? <a href="index.php">Proceed manually</a>.
+				Nothing happens? <a href="<?php echo $proceedUrl ?>">Proceed manually</a>.
 				<script type="text/javascript">
-					setTimeout(function() { redirectToIndex(); }, 2000);
+					setTimeout(function() { window.location.href="<?php echo $proceedUrl ?>"; }, 2000);
 				</script>
 			<?php 
 		} else {
 			// 2.2 - LOGGED IN AND REDIRECTED AFTER LOGIN FORM SUBMIT
+			require './fragments/topmenu.php'; 
 			?>
-				<a href="index.php">Home</a> |
-				<a href="index.php?userAction=logoutAction">Logout</a> |
-				<a href="index.php?userAction=generateScriptAction">Generate DB SQL script</a> |
-				<a href="index.php?userAction=runScriptAction">Run create tables on DB</a> |
-				<a href="index.php?userAction=manageMembers">Manage members</a> |
-				<a href="index.php?userAction=manageRoles">Manage roles</a> |
-				<a href="index.php?userAction=managePrograms">Manage speaking programs</a>
+				<a href="index.php?userAction=testDBConnection">Test DB connection</a> <br/>
+				<a href="index.php?userAction=generateScriptAction">Generate DB SQL script</a> <br/>
+				<a href="index.php?userAction=runScriptAction">Run create tables on DB</a> <br/>
 				<br/>
-				<hr/>
 			<?php 
 			$userAction = RequestHelper::getUserAction();
-			if($userAction == "") {
+			if($userAction == "testDBConnection") {
 				$dbLink = mysql_connect($dbHost, $dbName, $dbPass);
 				if (!$dbLink) {
 				    echo 'Could not connect to database: '.mysql_error().'.';
@@ -91,10 +81,7 @@
 					
 					mysql_close($dbLink);				
 				}
-			} elseif($userAction == "manageMembers") {
-			} elseif($userAction == "manageRoles") {
-			} elseif($userAction == "managePrograms") {
-				
+			} elseif($userAction == "") {	
 			} else {
 				?>
 					Error: unknown action
@@ -103,6 +90,6 @@
 			}
 		}
 	}
+	
+	require './fragments/tail.php';
 ?>
-	</body>
-</html>
