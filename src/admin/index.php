@@ -37,8 +37,8 @@
 			// 2.2 - LOGGED IN AND REDIRECTED AFTER LOGIN FORM SUBMIT
 			require './fragments/topmenu.php'; 
 			?>
-				<a href="index.php?userAction=testDBConnection">Test DB connection</a> <br/>
-				<a href="index.php?userAction=generateScriptAction">Generate DB SQL script</a> <br/>
+				<a href="index.php?userAction=testDBConnection">Test DB connection</a> | 
+				<a href="index.php?userAction=generateScriptAction">Generate DB SQL script</a> |
 				<a href="index.php?userAction=runScriptAction">Run create tables on DB</a> <br/>
 				<br/>
 			<?php 

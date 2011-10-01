@@ -13,24 +13,24 @@
 			return $dbLink;	
 		}
 		
-		public static function loadAll($className) {
-			return DBPersistenceHelper::loadConditional($className, NULL);
+		public static function loadAll($className, $orderBy) {
+			return DBPersistenceHelper::loadConditional($className, NULL, $orderBy);
 		}
 		
-		public static function loadConditional($className, $whereClause) {
+		public static function loadConditional($className, $whereClause, $orderBy) {
 			$dbLink = DBPersistenceHelper::getDBConnection();
 			$table = $className;
-			$methods = get_class_methods($className);
-			$fields = "id";
-			foreach($methods as $methodName) {
-				if(substr($methodName, 0, 3) === "get" && $methodName!="getId")
-				$fields=$fields.", ".substr($methodName, 3);
-			}
-			
-			$query = "select ".$fields." from ".$table;
+			$fields = DBPersistenceHelper::getClassFields($className);
+
+			$query = "select ".implode(", ", $fields)." from ".$table;
 			if(!empty($whereClause)) {
 				$query = $query." WHERE ".$whereClause;
 			}
+			if(!empty($orderBy)) {
+				$query = $query." ORDER BY ".$orderBy;
+			}
+			
+			echo "<!-- DEBUG: query = ".$query." -->";
 			
 			$queryResult = mysql_query($query, $dbLink);
 			$result = array();
@@ -40,7 +40,69 @@
 					$result[]= $reflectionObj->newInstanceArgs($row);
 				}
 			}
+			mysql_close($dbLink);
 			return $result;
+		}
+		
+		public static function insert($instance) {
+			$className = get_class($instance);
+			$dbLink = DBPersistenceHelper::getDBConnection();
+			
+			$fields = DBPersistenceHelper::getClassFields($className);
+			unset($fields[0]); // Remove ID field
+			
+			$query = "insert into ".$className." (".implode(", ", $fields).") values (";
+			$methods = get_class_methods($className);
+			foreach($methods as $methodName) {
+				if(substr($methodName, 0, 3) === "get" && $methodName!="getId") {
+					$value = call_user_func(array($instance, $methodName));
+					$valueEscaped = mysql_real_escape_string($value, $dbLink);
+					$query = $query."'".$valueEscaped."',";
+				}
+			}
+			$query = substr($query, 0, strlen($query)-1).");";
+			
+			echo "<!-- DEBUG: query = ".$query." -->";
+			
+			$queryResult = mysql_query($query, $dbLink);
+			mysql_close($dbLink);
+			
+			return $queryResult;
+		}
+		
+		public static function update($id, $instance) {
+			$className = get_class($instance);
+			$dbLink = DBPersistenceHelper::getDBConnection();
+			
+			$query = "update ".$className." set ";
+			$methods = get_class_methods($className);
+			foreach($methods as $methodName) {
+				if(substr($methodName, 0, 3) === "get" && $methodName!="getId") {
+					$fieldName = substr($methodName, 3);;
+					$value = call_user_func(array($instance, $methodName));
+					$valueEscaped = mysql_real_escape_string($value, $dbLink);
+					$query = $query.$fieldName." = '".$valueEscaped."',";
+				}
+			}
+			$query = substr($query, 0, strlen($query)-1)." where id='".mysql_real_escape_string($id, $dbLink)."';";
+			
+			echo "<!-- DEBUG: query = ".$query." -->";
+			
+			$queryResult = mysql_query($query, $dbLink);
+			mysql_close($dbLink);
+			
+			return $queryResult;
+		}		
+		
+		public static function getClassFields($className) {
+			$fields = array("id");
+			$methods = get_class_methods($className);
+			foreach($methods as $methodName) {
+				if(substr($methodName, 0, 3) === "get" && $methodName!="getId") {
+					$fields[] = substr($methodName, 3);
+				}
+			}
+			return $fields;
 		}
 	}
 ?>

@@ -100,20 +100,23 @@
 	// !!! IMPORTANT NOTICE: 
 	// - Order of constructor parameters MUST match order of getter methods
 	// - Names of getter methods MUST match get<DB Field Name> pattern
+	// - Names of classses MUST match names of corresponding DB tables
 	class Member {
 		private $id;
 		private $firstName;
 		private $lastName;
 		private $email;
+		private $pwdHash;
 		private $contactInfo;
 		private $disabled;
 		private $image;
 
-		public function __construct($id, $firstName, $lastName, $email, $contactInfo, $disabled, $image) {
+		public function __construct($id, $firstName, $lastName, $email, $pwdHash, $contactInfo, $disabled, $image) {
 			$this->id = $id;
 			$this->firstName = $firstName;
 			$this->lastName = $lastName;
 			$this->email = $email;	
+			$this->pwdHash = $pwdHash;
 			$this->contactInfo = $contactInfo;
 			$this->disabled = $disabled;
 			$this->image = $image;	
@@ -123,6 +126,7 @@
 		public function getFirstName() { return $this->firstName; }
 		public function getLastName() { return $this->lastName; }
 		public function getEmail() { return $this->email; }
+		public function getPwdHash() { return $this->pwdHash; }
 		public function getContactInfo() { return $this->contactInfo; }
 		public function getDisabled() { return $this->disabled; }
 		public function getImage() { return $this->image; }
