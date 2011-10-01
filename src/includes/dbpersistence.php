@@ -6,7 +6,7 @@
 			global $dbName;
 			global $dbPass;
 			
-			$result = mysql_connect($dbHost, $dbName, $dbPass);
+			$result = mysql_pconnect($dbHost, $dbName, $dbPass);
 			if($result) {
 				$db_selected = mysql_select_db($dbName, $result);
 				if (!$db_selected) {
