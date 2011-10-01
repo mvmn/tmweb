@@ -40,7 +40,7 @@
 			if(isset($this->typeModifier) && strlen($this->typeModifier)>0) {
 				$result = $result.'('.$this->typeModifier.')';
 			}
-			if(isset($this->notNull)) {
+			if(isset($this->notNull) && $this->notNull==true) {
 				$result = $result.' NOT NULL';
 			}
 			if(isset($this->defaultValue)  && strlen($this->defaultValue)>0) {

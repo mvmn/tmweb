@@ -56,8 +56,12 @@
 			foreach($methods as $methodName) {
 				if(substr($methodName, 0, 3) === "get" && $methodName!="getId") {
 					$value = call_user_func(array($instance, $methodName));
-					$valueEscaped = mysql_real_escape_string($value, $dbLink);
-					$query = $query."'".$valueEscaped."',";
+					if($value === NULL) { 
+						$valueEscapedQuoted="NULL";
+					} else {
+						$valueEscapedQuoted = "'".mysql_real_escape_string($value, $dbLink)."'";
+					}
+					$query = $query.$valueEscapedQuoted.",";										
 				}
 			}
 			$query = substr($query, 0, strlen($query)-1).");";
@@ -80,8 +84,12 @@
 				if(substr($methodName, 0, 3) === "get" && $methodName!="getId") {
 					$fieldName = substr($methodName, 3);;
 					$value = call_user_func(array($instance, $methodName));
-					$valueEscaped = mysql_real_escape_string($value, $dbLink);
-					$query = $query.$fieldName." = '".$valueEscaped."',";
+					if($value === NULL) { 
+						$valueEscapedQuoted="NULL";
+					} else {
+						$valueEscapedQuoted = "'".mysql_real_escape_string($value, $dbLink)."'";
+					}
+					$query = $query.$fieldName." = ".$valueEscapedQuoted.",";
 				}
 			}
 			$query = substr($query, 0, strlen($query)-1)." where id='".mysql_real_escape_string($id, $dbLink)."';";
