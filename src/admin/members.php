@@ -16,10 +16,10 @@
 		$userAction = RequestHelper::getUserAction();
 		if($userAction == "") {
 			$members = DBPersistenceHelper::loadAll("Member", "id");
-			if(!$members)  { 
-				echo mysql_error();
+			if($members instanceof ErrorResult) { 
+				echo "Error: ".$members->getErrorMessage();
 			} else {
-				echo '<table><thead><tr><td>Fist Name</td><td>Last Name</td><td>E-mail</td><td>Contacts</td><td>Disabled</td><td>Actions</td></tr></thead><tbody>';
+				echo '<table border="1" cellpadding="2" cellspacing="0"><thead><tr><td>Fist Name</td><td>Last Name</td><td>E-mail</td><td>Contacts</td><td>Disabled</td><td>Actions</td></tr></thead><tbody>';
 				foreach($members as $member) {
 					echo '<tr><td>'.$member->getFirstName().'</td>';
 					echo '<td>'.$member->getLastName().'</td>';
@@ -77,10 +77,12 @@
 				} else {
 					$result = DBPersistenceHelper::insert($memberData);
 				}
-				if(!$result) {
-					echo "Error occurred: ".mysql_error();
-				} else {
+				if($result instanceof ErrorResult) {
+					echo "Error occurred: ".$result->getErrorMessage();
+				} elseif($result == 1) {
 					echo "Data saved.";
+				} else {
+					echo "Unknown error. ";
 				}
 			} else {
 				echo "Invalid data.";
@@ -97,7 +99,9 @@
 			$memberId = $_REQUEST['memberId'];
 			if(!empty($memberId) && preg_match('/^\d+$/', $memberId)) {
 				$members = DBPersistenceHelper::loadConditional("Member", "id=".$memberId, NULL);
-				if($members) {
+				if($members instanceof ErrorResult) {
+					echo "Error occurred: ".$members->getErrorMessage();
+				} elseif ($members) {
 					if(count($members)==1) {
 						$member = $members[0];
 						if($member) {
@@ -123,7 +127,7 @@
 						echo "Error occurred: 1 member expected, ".count($members)." found.";
 					}
 				} else {
-					echo "Error occurred: no results found. ".mysql_error();
+					echo "Error occurred: no results returned. ";
 				}
 			} else {
 				echo "Error: memberId parameter invalid.";
