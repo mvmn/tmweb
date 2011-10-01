@@ -30,8 +30,11 @@
 				$query = $query." ORDER BY ".$orderBy;
 			}
 			
-			echo "<!-- DEBUG: query = ".$query." -->";
-			
+			global $debugMode;
+			if($debugMode == true) {
+				echo "<!-- DEBUG: query = ".$query." -->";
+			}
+						
 			$queryResult = mysql_query($query, $dbLink);
 			$result = array();
 			if($queryResult) {
@@ -66,7 +69,10 @@
 			}
 			$query = substr($query, 0, strlen($query)-1).");";
 			
-			echo "<!-- DEBUG: query = ".$query." -->";
+			global $debugMode;
+			if($debugMode == true) {
+				echo "<!-- DEBUG: query = ".$query." -->";
+			}
 			
 			$queryResult = mysql_query($query, $dbLink);
 			mysql_close($dbLink);
@@ -94,8 +100,10 @@
 			}
 			$query = substr($query, 0, strlen($query)-1)." where id='".mysql_real_escape_string($id, $dbLink)."';";
 			
-			echo "<!-- DEBUG: query = ".$query." -->";
-			
+			global $debugMode;
+			if($debugMode == true) {
+				echo "<!-- DEBUG: query = ".$query." -->";
+			}			
 			$queryResult = mysql_query($query, $dbLink);
 			mysql_close($dbLink);
 			

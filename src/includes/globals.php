@@ -3,6 +3,9 @@
 	global $siteName;
 	$siteName = 'Lemberg Toastmasters';
 	
+	global $debugMode;
+	$debugMode = true;
+	
 	// Admin notification
 	global $adminEmail;
 	$adminEmail = 'mvmn.inbox@gmail.com'; 
