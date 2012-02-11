@@ -1,5 +1,5 @@
 <?php
-	require './includes/init.php';
+	require './init.php';
 	require './fragments/head.php';
 	require './fragments/topmenu.php';
 ?>

@@ -1,5 +1,5 @@
 <?php
-	require './includes/init.php';
+	require './init.php';
 	if($loginInfo->isLoggedIn()!=true) {
 		require './fragments/notloggedin.php';
 	} else {

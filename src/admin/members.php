@@ -1,5 +1,5 @@
 <?php
-	require './includes/init.php';
+	require './init.php';
 	if($loginInfo->isLoggedIn()!=true) {
 		require './fragments/notloggedin.php';
 	} else {
@@ -12,7 +12,7 @@
 			<a href="members.php?userAction=addMember">Add member</a>
 			<br/>
 			<br/>
-		<?php 		
+		<?php
 		$userAction = RequestHelper::getUserAction();
 		if($userAction == "") {
 			$members = DBPersistenceHelper::loadAll("Member", "id");
@@ -28,7 +28,6 @@
 					echo '<td><input type="checkbox" disabled="true" '.($member->getDisabled()!=0?'checked="checked"':'').' /></td>';
 					echo '<td><a href="members.php?userAction=editMember&memberId='.$member->getId().'">edit</a></td>';
 					echo '</tr>';
-										
 				}
 				echo '</tbody></table>';
 			}
