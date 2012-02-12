@@ -32,11 +32,6 @@
 			if($this->getIndexes() !=null && count($this->getIndexes())>0) {
 				foreach($this->getIndexes() as $index) {
 					$script = $script.",\n    ".$index;
-					//$script = $script.",\n    INDEX ".$index->getName()." (";
-					//foreach($index->getFieldsDefs() as $fieldDef) {
-					//	$script = $script.$fieldDef.", ";	
-					//}
-					//$script = substr($script, 0, -2).")";
 				}
 			}
 			$script = $script."\n);\n\n";
@@ -152,10 +147,6 @@
 				"emailDisabledIndex" => new DBIndex(
 					"I_EMAILDISABLED",
 					array("email(32)", "disabled") 
-				),
-				"idDisabledIndex" => new DBIndex(
-					"I_IDDISABLED",
-					array("id", "disabled") 
 				),
 				"lastNameIndex" => new DBIndex(
 					"I_LASTNAME",
