@@ -3,12 +3,12 @@
 	class DBTable {
 		private $name;
 		private $fields;
-		private $indicies;
+		private $indexes;
 		
-		public function __construct($name, $fields, $indicies) {
+		public function __construct($name, $fields, $indexes) {
 			$this->name = $name;
 			$this->fields = $fields;
-			$this->indicies = $indicies;
+			$this->indexes = $indexes;
 		}
 		
 		public function getName() {
@@ -19,8 +19,8 @@
 			return $this->fields;
 		}
 	
-		public function getIndicies() {
-			return $this->indicies;
+		public function getIndexes() {
+			return $this->indexes;
 		}
 		
 		public function __toString() {
@@ -29,8 +29,8 @@
 				$script = $script.'    '.$field.",\n";
 			}	
 			$script = $script."    id int not null auto_increment,\n    primary key(id)";
-			if($this->getIndicies() !=null && count($this->getIndicies())>0) {
-				foreach($this->getIndicies() as $index) {
+			if($this->getIndexes() !=null && count($this->getIndexes())>0) {
+				foreach($this->getIndexes() as $index) {
 					$script = $script.",\n    ".$index;
 					//$script = $script.",\n    INDEX ".$index->getName()." (";
 					//foreach($index->getFieldsDefs() as $fieldDef) {
