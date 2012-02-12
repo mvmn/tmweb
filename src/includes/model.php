@@ -1,4 +1,76 @@
 <?php
+
+	class DBTable {
+		private $name;
+		private $fields;
+		private $indicies;
+		
+		public function __construct($name, $fields, $indicies) {
+			$this->name = $name;
+			$this->fields = $fields;
+			$this->indicies = $indicies;
+		}
+		
+		public function getName() {
+			return $this->name;
+		}
+
+		public function getFields() {
+			return $this->fields;
+		}
+	
+		public function getIndicies() {
+			return $this->indicies;
+		}
+		
+		public function __toString() {
+			$script =  'CREATE TABLE '.$this->getName()." (\n";
+			foreach ($this->getFields() as $field) {
+				$script = $script.'    '.$field.",\n";
+			}	
+			$script = $script."    id int not null auto_increment,\n    primary key(id)";
+			if($this->getIndicies() !=null && count($this->getIndicies())>0) {
+				foreach($this->getIndicies() as $index) {
+					$script = $script.",\n    ".$index;
+					//$script = $script.",\n    INDEX ".$index->getName()." (";
+					//foreach($index->getFieldsDefs() as $fieldDef) {
+					//	$script = $script.$fieldDef.", ";	
+					//}
+					//$script = substr($script, 0, -2).")";
+				}
+			}
+			$script = $script."\n);\n\n";
+			return $script;			
+		}
+	}
+
+	class DBIndex {
+		private $name;
+		private $fieldsDefs;
+		
+		public function __construct($name, $fieldsDefs) {
+			$this->name = $name;
+			$this->fieldsDefs = $fieldsDefs;
+		}
+		
+		public function getName() {
+			return $this->name;
+		}
+
+		public function getFieldsDefs() {
+			return $this->fieldsDefs;
+		}
+		
+		public function __toString() {
+			$result = "INDEX ".$this->name." (";
+			foreach ($this->fieldsDefs as $fieldDef) {
+				$result = $result.$fieldDef.', ';
+			}
+			$result = substr($result, 0, -2).')';
+			return $result;
+		}
+	}
+	
 	class DBField {
 	
 		private $type;
@@ -53,47 +125,100 @@
 	// #### DB STRUCTURE
 	global $dbTables;
 	$dbTables = array(
-		"Member" => array(
-			"firstName" => new DBField("firstName", "nvarchar", "1024", true, NULL),
-			"lastName" => new DBField("lastName", "nvarchar", "1024", true, NULL),
-			"email" => new DBField("email", "nvarchar", "1024", true, NULL),
-			"pwdhash" => new DBField("pwdhash", "varchar", "1024", true, NULL),
-			"contactInfo" => new DBField("contactInfo", "text", NULL, false, NULL),
-			"image" => new DBField("image", "nvarchar", "1024", false, NULL),
-			"disabled" => new DBField("disabled", "boolean", NULL, true, "0")
+		"Member" => new DBTable(
+			"Member", 
+			array(
+				"firstName" => new DBField("firstName", "nvarchar", "1024", true, NULL),
+				"lastName" => new DBField("lastName", "nvarchar", "1024", true, NULL),
+				"email" => new DBField("email", "nvarchar", "1024", true, NULL),
+				"pwdhash" => new DBField("pwdhash", "varchar", "1024", true, NULL),
+				"contactInfo" => new DBField("contactInfo", "text", NULL, false, NULL),
+				"image" => new DBField("image", "nvarchar", "1024", false, NULL),
+				"disabled" => new DBField("disabled", "boolean", NULL, true, "0")
+			),
+			array(
+				"emailIndex" => new DBIndex(
+					"I_EMAIL",
+					array("email(32)") 
+				),
+				"disabledIndex" => new DBIndex(
+					"I_DISABLED",
+					array("disabled") 
+				),
+				"emailIndex" => new DBIndex(
+					"I_EMAIL",
+					array("email(32)") 
+				),
+				"emailDisabledIndex" => new DBIndex(
+					"I_EMAILDISABLED",
+					array("email(32)", "disabled") 
+				),
+				"idDisabledIndex" => new DBIndex(
+					"I_IDDISABLED",
+					array("id", "disabled") 
+				),
+				"lastNameIndex" => new DBIndex(
+					"I_LASTNAME",
+					array("lastName(16)") 
+				)
+			)
 		),
-		"Meeting" => array(
-			"dateandtime" => new DBField("dateandtime", "datetime", NULL, true, NULL),
-			"place" => new DBField("place", "text", NULL, false, NULL)
+		"Meeting" => new DBTable(
+			"Meeting", 
+			array(
+				"dateandtime" => new DBField("dateandtime", "datetime", NULL, true, NULL),
+				"place" => new DBField("place", "text", NULL, false, NULL)
+			),
+			null
 		),
-		"Role" => array(
-			"name" => new DBField("name", "nvarchar", "1024", true, NULL),
-			"description" => new DBField("description", "text", NULL, false, NULL),
-			"iconone" => new DBField("iconone", "nvarchar", "1024", true, NULL),
-			"iconten" => new DBField("iconten", "nvarchar", "1024", true, NULL)
+		"Role" => new DBTable(
+			"Role", 
+			array(
+				"name" => new DBField("name", "nvarchar", "1024", true, NULL),
+				"description" => new DBField("description", "text", NULL, false, NULL),
+				"iconone" => new DBField("iconone", "nvarchar", "1024", true, NULL),
+				"iconten" => new DBField("iconten", "nvarchar", "1024", true, NULL)
+			),
+			null
 		),
-		"SpeechesProgram" => array(
-			"name" => new DBField("name", "nvarchar", "1024", true, NULL),
-			"shortname" => new DBField("shortname", "nvarchar", "8", true, NULL),
-			"description" => new DBField("description", "text", NULL, false, NULL)
+		"SpeechesProgram" => new DBTable(
+			"SpeechesProgram",
+			array(
+				"name" => new DBField("name", "nvarchar", "1024", true, NULL),
+				"shortname" => new DBField("shortname", "nvarchar", "8", true, NULL),
+				"description" => new DBField("description", "text", NULL, false, NULL)
+			),
+			null
 		),
-		"SpeechProject" => array(
-			"speechProgramId" => new DBField("speechProgramId", "int", NULL, true, NULL),
-			"description" => new DBField("description", "text", NULL, false, NULL),
-			"speechTime" => new DBField("speechTime", "nvarchar", "1024", false, NULL),
-			"projectNumber" => new DBField("projectNumber", "smallint", NULL, false, NULL)
+		"SpeechProject" => new DBTable(
+			"SpeechProject",
+			array(
+				"speechProgramId" => new DBField("speechProgramId", "int", NULL, true, NULL),
+				"description" => new DBField("description", "text", NULL, false, NULL),
+				"speechTime" => new DBField("speechTime", "nvarchar", "1024", false, NULL),
+				"projectNumber" => new DBField("projectNumber", "smallint", NULL, false, NULL)
+			),
+			null
 		),
-		"RoleParticipation" => array(
-			"meetingId" => new DBField("meetingId", "int", NULL, true, NULL),
-			"roleId" => new DBField("roleId", "int", NULL, true, NULL),
-			"memberId" => new DBField("memberId", "int", NULL, true, NULL),
-			"remarks" => new DBField("remarks", "text", NULL, false, NULL)
+		"RoleParticipation" => new DBTable(
+			"RoleParticipation",
+			array(
+				"meetingId" => new DBField("meetingId", "int", NULL, true, NULL),
+				"roleId" => new DBField("roleId", "int", NULL, true, NULL),
+				"memberId" => new DBField("memberId", "int", NULL, true, NULL),
+				"remarks" => new DBField("remarks", "text", NULL, false, NULL)
+			),
+			null
 		),
-		"SpeechDelivery" => array(
-			"meetingId" => new DBField("meetingId", "int", NULL, true, NULL),
-			"memberId" => new DBField("memberId", "int", NULL, true, NULL),
-			"speechProjectId" => new DBField("speechProjectId", "int", NULL, true, NULL),
-			"remarks" => new DBField("remarks", "text", NULL, false, NULL)
+		"SpeechDelivery" => new DBTable(
+			"SpeechDelivery",
+			array(
+				"meetingId" => new DBField("meetingId", "int", NULL, true, NULL),
+				"memberId" => new DBField("memberId", "int", NULL, true, NULL),
+				"speechProjectId" => new DBField("speechProjectId", "int", NULL, true, NULL),
+				"remarks" => new DBField("remarks", "text", NULL, false, NULL)
+			),
+			null
 		)
 	);
 

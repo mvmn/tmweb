@@ -1,20 +1,12 @@
 <?php
 	class AdminDBHelper {
 		
-		public static function createTablesScript($dbFieldsArraysArray) {
+		public static function createTablesScript($dbTablesArray) {
 			$script = '';
-			foreach ($dbFieldsArraysArray as $tblKey => $table) {
-				$script = $script.AdminDBHelper::createTableScript($tblKey, $dbFieldsArraysArray[$tblKey]);
+			foreach ($dbTablesArray as $tblKey => $table) {
+				//$script = $script.AdminDBHelper::createTableScript($dbTablesArray[$tblKey]);
+				$script = $script.$table;
 			}
-			return $script;
-		}
-		
-		public static function createTableScript($tableName, $dbFieldArray) {
-			$script =  'CREATE TABLE '.$tableName." (\n";
-			foreach ($dbFieldArray as $fldKey => $field) {
-				$script = $script.'    '.$dbFieldArray[$fldKey].",\n";
-			}	
-			$script = $script."    id int not null auto_increment,\n    primary key(id)\n);\n\n";
 			return $script;
 		}
 	};

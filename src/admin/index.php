@@ -69,9 +69,9 @@
 					}
 					echo '<br/>';
 					
-					foreach ($dbTables as $tblKey => $table) {
-						echo 'Creating table '.$tblKey.'...<br/>';
-						$script = AdminDBHelper::createTableScript($tblKey, $dbTables[$tblKey]);
+					foreach ($dbTables as $dbTable) {
+						echo 'Creating table '.$dbTable->getName().'...<br/>';
+						$script = $dbTable;
 						$result = mysql_query($script, $dbLink);
 						if (!$result) {
     						echo 'Error occurred: '.mysql_error()."<br/>";
